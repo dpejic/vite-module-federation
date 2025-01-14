@@ -1,0 +1,9 @@
+node_modules
+*.log
+*.md
+.git
+.gitignore
+.dockerignore
+nginx_db_data
+nginx_data
+.mf*

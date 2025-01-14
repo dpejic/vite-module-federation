@@ -1,0 +1,1 @@
+{"root":["./global.d.ts","./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/errorboundary.tsx","./src/components/header/header.tsx","./src/components/layout/layout.tsx","./src/utils/tw.ts"],"errors":true,"version":"5.6.3"}

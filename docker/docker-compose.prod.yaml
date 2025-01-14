@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  vite-host:
+    platform: linux/amd64
+    build: 
+      context: ../
+      dockerfile: docker/Dockerfile.prod.host
+    container_name: vite-host
+    restart: unless-stopped
+    networks:
+      - proxy
+
+  vite-catalog:
+    platform: linux/amd64
+    build: 
+      context: ../
+      dockerfile: docker/Dockerfile.prod.catalog
+    container_name: vite-catalog
+    restart: unless-stopped
+    networks:
+      - proxy
+  
+  vite-shopping:
+    platform: linux/amd64
+    build: 
+      context: ../
+      dockerfile: docker/Dockerfile.prod.shopping
+    container_name: vite-shopping
+    restart: unless-stopped
+    networks:
+      - proxy
+
+  nginx_proxy_manager:
+    image: jc21/nginx-proxy-manager:2.12.1
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "81:81"
+    volumes:
+      - ../nginx_data:/data
+      - ../letsencrypt:/etc/letsencrypt
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    driver: bridge

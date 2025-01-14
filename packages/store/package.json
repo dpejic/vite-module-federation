@@ -1,0 +1,22 @@
+{
+  "name": "@dp-wk/store",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch --preserveWatchOutput | awk '{gsub(/\\033c/,\"\") system(\"\")}1'"
+  },
+  "devDependencies": {
+    "typescript": "~5.6.2",
+    "vite": "^5.4.10"
+  },
+  "dependencies": {
+    "@dp-wk/types": "file:../types",
+    "rollup": "^4.29.1",
+    "rxjs": "~7.8.0",
+    "zustand": "^5.0.1"
+  }
+}

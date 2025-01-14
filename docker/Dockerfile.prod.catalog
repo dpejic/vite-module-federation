@@ -1,0 +1,30 @@
+FROM node:20-slim AS builder
+
+WORKDIR /app
+
+ENV SERVICE_NAME=vite-catalog
+
+COPY ../apps/$SERVICE_NAME/. apps/$SERVICE_NAME/.
+COPY ../packages/. packages/.
+
+WORKDIR /app/packages/store
+RUN npm ci && npm run build
+
+WORKDIR /app/packages/emitter
+RUN npm ci && npm run build
+
+WORKDIR /app/apps/$SERVICE_NAME
+RUN rm -rf node_modules && npm ci && npm run build
+
+FROM node:20-slim AS runner
+
+ENV SERVICE_NAME=vite-catalog
+
+WORKDIR /app/apps/$SERVICE_NAME
+
+COPY --from=builder /app/apps/$SERVICE_NAME /app/apps/$SERVICE_NAME/. 
+COPY --from=builder /app/packages/. /app/packages/.
+
+EXPOSE 3007
+
+CMD sh -c "cd /app/apps/$SERVICE_NAME && npm run preview"

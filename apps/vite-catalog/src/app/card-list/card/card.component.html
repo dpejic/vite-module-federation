@@ -1,0 +1,8 @@
+<div class="tw-border tw-p-2 tw-max-w-[200px] tw-cursor-pointer hover:tw-shadow-xl">
+  <div class="tw-bg-white">
+    <img class="tw-w-full tw-h-[200px]" [src]="item.url" />
+  </div>
+  <p>{{item.name}}</p>
+  <p class="tw-text-xs">{{item.price}} $</p>
+  <button class="tw-bg-purple-500 tw-text-white tw-rounded tw-w-full hover:tw-bg-purple-600" (click)="addToCart(item)">Add to cartt</button>
+</div>

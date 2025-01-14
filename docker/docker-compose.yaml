@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  vite-host:
+    platform: linux/amd64
+    build: 
+      context: ../
+      dockerfile: docker/Dockerfile.dev.host
+    container_name: vite-host
+    ports:
+      - 3080:3080
+    volumes:
+      - ../apps/vite-host:/app/apps/vite-host
+      - ../packages:/app/packages
+      - /app/apps/vite-host/node_modules
+      - /app/packages/store/node_modules
+      - /app/packages/emitter/node_modules
+      - /app/packages/types/node_modules
+    restart: on-failure
+    networks:
+      - proxy
+
+  vite-catalog:
+    platform: linux/amd64
+    build: 
+      context: ../
+      dockerfile: docker/Dockerfile.dev.catalog
+    container_name: vite-catalog
+    ports:
+      - 3081:3081
+    volumes:
+      - ../apps/vite-catalog:/app/apps/vite-catalog
+      - ../packages:/app/packages
+      - /app/apps/vite-catalog/node_modules
+      - /app/packages/store/node_modules
+      - /app/packages/emitter/node_modules
+      - /app/packages/types/node_modules
+      - /app/packages/utils/node_modules
+    restart: on-failure
+    networks:
+      - proxy
+  
+  vite-shopping:
+    platform: linux/amd64
+    build: 
+      context: ../
+      dockerfile: docker/Dockerfile.dev.shopping
+    container_name: vite-shopping
+    ports:
+      - 3082:3082
+    volumes:
+      - ../apps/vite-shopping:/app/apps/vite-shopping
+      - ../packages:/app/packages
+      - /app/apps/vite-shopping/node_modules
+      - /app/packages/store/node_modules
+      - /app/packages/emitter/node_modules
+      - /app/packages/types/node_modules
+      - /app/packages/utils/node_modules
+    restart: always
+    networks:
+      - proxy
+
+  nginx_proxy_manager:
+    image: jc21/nginx-proxy-manager:2.12.1
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "81:81"
+    volumes:
+      - ../nginx_data:/data
+      - ../letsencrypt:/etc/letsencrypt
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    driver: bridge

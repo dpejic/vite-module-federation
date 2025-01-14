@@ -1,0 +1,21 @@
+{
+  "name": "@dp-wk/utils",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch --preserveWatchOutput | awk '{gsub(/\\033c/,\"\") system(\"\")}1'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.5.3",
+    "vite": "^5.4.8"
+  },
+  "dependencies": {
+    "rollup": "^4.29.1"
+  }
+}

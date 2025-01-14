@@ -1,0 +1,19 @@
+FROM node:20-slim AS workspace
+
+WORKDIR /app
+
+ENV SERVICE_NAME=vite-host
+
+COPY ../apps/vite-host/. apps/vite-host/.
+COPY ../packages/. packages/.
+
+RUN cd packages/store && npm ci
+RUN cd packages/emitter && npm ci
+
+RUN cd apps/vite-host && rm -rf node_modules && npm ci
+
+RUN npm install -g concurrently
+
+EXPOSE 3005
+
+CMD ["sh", "-c", "concurrently --kill-others \"cd packages/store && npm run watch\" \"cd packages/emitter && npm run watch\" \"cd apps/vite-host && npm run dev\""]

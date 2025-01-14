@@ -1,0 +1,10 @@
+node_modules
+.__mf__temp
+
+vite.config.js.timestamp-*.mjs
+vite.config.ts.timestamp-*.mjs
+
+certs/generated/*
+nginx_db_data/*
+nginx_data
+dist

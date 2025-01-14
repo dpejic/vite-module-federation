@@ -1,0 +1,24 @@
+{
+  "name": "@dp-wk/emitter",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch --preserveWatchOutput | awk '{gsub(/\\033c/,\"\") system(\"\")}1'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/fbemitter": "^2.0.35",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.8"
+  },
+  "dependencies": {
+    "fbemitter": "^3.0.0",
+    "rollup": "^4.29.1"
+  }
+}

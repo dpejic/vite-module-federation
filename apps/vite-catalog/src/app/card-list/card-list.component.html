@@ -1,0 +1,7 @@
+<div class="tw-flex tw-flex-wrap tw-gap-5">
+  @for (item of items; track item.id) {
+    <app-card [item]="item"></app-card>
+  } @empty {
+    <p>no items to show</p>
+  }
+</div>
