@@ -1,0 +1,136 @@
+sudo vim /etc/hosts
+127.0.0.1 dpejic.com
+127.0.0.1 proxy.dpejic.com
+127.0.0.1 catalog.dpejic.com
+127.0.0.1 shopping.dpejic.com
+
+
+Generate certs:
+
+cd certs
+chmod +x generate-certificates.sh
+./generate-certificates.sh
+
+
+How to trust this certificate (Mac):
+
+- Open the Keychain Access application and select System.
+- Go to File on top menu > Import Items.
+- Select the certs/generated/dpejic-root-ca.crt file and click Open.
+- After importing, locate the certificate in the list.
+- Right-click on the certificate, and select Get Info.
+- In the Trust section, set the certificate to Always Trust.
+- Close the dialog and restart your applications that need the certificate (including browsers).
+
+
+Enter Nginx Proxy Manager Admin Panel localhost:81
+and enter
+
+admin@example.com
+changeme
+
+- After login follow instructions to change your credentials
+- Go to SSL Certificates and click button to add Custom SSL
+- Enter name : dpejic.com
+- Certificate Key: dpejic-wildcard.key
+- Certificate: dpejic-wildcard.crt
+
+Go to Proxy Host
+
+Enters:
+  ------------------------------------
+  dpejic.com
+  http://vite-host:3005
+  enable websocket support
+  Go to advanced and put
+
+  proxy_set_header Upgrade $http_upgrade;
+  proxy_set_header Connection "Upgrade";
+
+  Go to Custom locations
+  add /socket.io
+  http host.docker.internal 3080
+
+  Go to SSL
+  select dpejic.com
+  Enable Force and HTTP2 Support
+  Save
+  ------------------------------------
+  ------------------------------------
+  catalog.dpejic.com
+  http://vite-catalog:3007
+  enable websocket support
+  Go to advanced and put
+
+  proxy_set_header Upgrade $http_upgrade;
+  proxy_set_header Connection "Upgrade";
+
+  Go to Custom locations
+  add /socket.io
+  http host.docker.internal 3081
+
+  Go to Custom locations
+  add /remoteEntry.js
+  http vite-shopping 3007
+
+  select custom config add this
+
+  proxy_cache off;
+
+  add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
+  add_header Pragma "no-cache";
+  add_header Expires 0;
+
+  Go to SSL
+  select dpejic.com
+  Enable Force and HTTP2 Support
+  Save
+  ------------------------------------
+  shopping.dpejic.com
+  http://vite-shopping:3008
+  enable websocket support
+  Go to advanced and put
+
+  proxy_set_header Upgrade $http_upgrade;
+  proxy_set_header Connection "Upgrade";
+
+  Go to Custom locations
+  add /socket.io
+  http host.docker.internal 3082
+
+  Go to Custom locations
+  add /remoteEntry.js
+  http vite-shopping 3008
+
+  select custom config add this
+
+  proxy_cache off;
+
+  add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
+  add_header Pragma "no-cache";
+  add_header Expires 0;
+
+
+  Go to SSL
+  select dpejic.com
+  Enable Force and HTTP2 Support
+  Save
+  ------------------------------------
+  proxy.dpejic.com
+  http://nginx_proxy_manager:81
+
+  Go to SSL
+  select dpejic.com
+  Enable Force and HTTP2 Support
+  Save
+  ------------------------------------
+
+docker-compose down
+docker-compose up
+
+docker container stop my-vite-host
+docker container remove my-vite-host
+docker build -f docker/Dockerfile.host -t my-vite-host .
+docker run -d -p 3005:3005 --name my-vite-host my-vite-host:latest
+
+

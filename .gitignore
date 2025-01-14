@@ -8,3 +8,4 @@ certs/generated/*
 nginx_db_data/*
 nginx_data
 dist
+.DS_Store
