@@ -1,4 +1,4 @@
-FROM node:20-slim AS builder
+FROM --platform=linux/amd64 node:20-slim AS builder
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ RUN npm ci && npm run build
 WORKDIR /app/apps/$SERVICE_NAME
 RUN rm -rf node_modules && npm ci && npm run build
 
-FROM node:20-slim AS runner
+FROM --platform=linux/amd64 node:20-slim AS runner
 
 ENV SERVICE_NAME=vite-catalog
 
