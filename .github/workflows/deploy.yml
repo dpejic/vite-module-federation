@@ -20,15 +20,9 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_KEY_PASSPHRASE }}" | ssh-add ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.REMOTE_SERVER_IP }} >> ~/.ssh/known_hosts
         shell: bash
-
-      - name: Debug SSH Key Setup
-        run: |
-          ls -l ~/.ssh
-          cat ~/.ssh/id_rsa
-        shell: bash
-        continue-on-error: true
 
       - name: Test SSH Connection
         run: |
