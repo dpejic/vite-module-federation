@@ -23,6 +23,15 @@ jobs:
           ssh-keyscan -H ${{ secrets.REMOTE_SERVER_IP }} >> ~/.ssh/known_hosts
         shell: bash
 
+      - name: Debug SSH Private Key
+        run: |
+          echo "Private key: ${SSH_PRIVATE_KEY}"
+          ls -la ~/.ssh
+          cat ~/.ssh/id_rsa
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Get Git Revision Count
         id: revision
         run: echo "REVISION=$(git rev-list --count prod)" >> $GITHUB_ENV
@@ -56,7 +65,9 @@ jobs:
           sed -i "s|image: catalog:.*|image: catalog:${{ env.REVISION }}|" /app/docker-compose.yml
           sed -i "s|image: shopping:.*|image: shopping:${{ env.REVISION }}|" /app/docker-compose.yml
 
-          docker stack deploy -c /app/docker-compose.yml my_stack
+          cd docker
+          docker compose down
+          docker compose up -d
 
           # Cleanup
           rm /app/tar/*.tar
