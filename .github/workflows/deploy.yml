@@ -5,6 +5,9 @@ on:
     branches:
       - prod
 
+env:
+  SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+
 jobs:
   deploy:
     name: Deploy
@@ -15,21 +18,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up SSH Key
+      - name: Setup SSH with a passphrase
+        env:
+          SSH_PASSPHRASE: ${{secrets.SSH_KEY_PASSPHRASE}}
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          echo "${{ secrets.SSH_KEY_PASSPHRASE }}" | ssh-add ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.REMOTE_SERVER_IP }} >> ~/.ssh/known_hosts
-        shell: bash
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          echo "echo $SSH_PASSPHRASE" > ~/.ssh_askpass && chmod +x ~/.ssh_askpass
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh_askpass ssh-add - >/dev/null
 
       - name: Test SSH Connection
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_SERVER_IP }} "echo 'SSH connection successful'"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_SERVER_IP }} "echo 'SSH connection successful'"
         shell: bash
 
       - name: Transfer Images to Server
         run: |
           set -e
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa notes.txt ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_SERVER_IP }}:/app/tar
+          scp -o StrictHostKeyChecking=no notes.txt ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_SERVER_IP }}:/app/tar
