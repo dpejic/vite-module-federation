@@ -38,9 +38,9 @@ jobs:
 
       - name: Build Docker Images
         run: |
-          docker build --platform linux/amd64 -f Dockerfile.prod.host -t host:${{ env.REVISION }} .
-          docker build --platform linux/amd64 -f Dockerfile.prod.catalog -t catalog:${{ env.REVISION }} .
-          docker build --platform linux/amd64 -f Dockerfile.prod.shopping -t shopping:${{ env.REVISION }} .
+          docker build --platform linux/arm64/v8 -f Dockerfile.prod.host -t host:${{ env.REVISION }} .
+          docker build --platform linux/arm64/v8 -f Dockerfile.prod.catalog -t catalog:${{ env.REVISION }} .
+          docker build --platform linux/arm64/v8 -f Dockerfile.prod.shopping -t shopping:${{ env.REVISION }} .
 
       - name: Save Docker Images
         run: |
