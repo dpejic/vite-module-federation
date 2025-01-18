@@ -52,3 +52,23 @@ jobs:
         run: |
           set -e
           scp -o StrictHostKeyChecking=no host-${{ env.REVISION }}.tar catalog-${{ env.REVISION }}.tar shopping-${{ env.REVISION }}.tar ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_SERVER_IP }}:/home/dev/app/tar
+
+      - name: Load Images and Deploy Stack
+        run: |
+          set -e
+          ssh -o StrictHostKeyChecking=no ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_SERVER_IP }} << EOF
+          echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker load -i /home/dev/app/tar/host-${{ env.REVISION }}.tar
+          echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker load -i /home/dev/app/tar/catalog-${{ env.REVISION }}.tar
+          echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker load -i /home/dev/app/tar/shopping-${{ env.REVISION }}.tar
+
+          sed -i "s|image: host:.*|image: host:${{ env.REVISION }}|" /home/dev/app/docker-compose.yaml
+          sed -i "s|image: catalog:.*|image: catalog:${{ env.REVISION }}|" /home/dev/app/docker-compose.yaml
+          sed -i "s|image: shopping:.*|image: shopping:${{ env.REVISION }}|" /home/dev/app/docker-compose.yaml
+
+          cd /home/dev
+          docker compose down
+          docker compose up -d
+
+          # Cleanup
+          rm /home/dev/app/tar/*.tar
+          EOF
