@@ -30,4 +30,4 @@ COPY --from=builder /app/packages/. /app/packages/.
 
 EXPOSE 3008
 
-CMD sh -c "cd /app/apps/$SERVICE_NAME && npm run preview"
+CMD ["/bin/sh", "-c", "cd /app/apps/$SERVICE_NAME && npm run preview"]

@@ -34,7 +34,7 @@ jobs:
 
       - name: Get Git Revision Count
         id: revision
-        run: echo "REVISION=$(git rev-list --count prod)" >> $GITHUB_ENV
+        run: echo "REVISION=$(git rev-list --count origin/prod)" >> $GITHUB_ENV
 
       - name: Build Docker Images
         run: |
