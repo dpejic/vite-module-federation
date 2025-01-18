@@ -42,7 +42,7 @@ jobs:
       - name: Build Docker Images
         run: |
           docker buildx create --use
-          docker buildx build --platform linux/arm64 -f Dockerfile.prod.host -t --output type=docker host:${{ env.REVISION }} .
+          docker buildx build --platform linux/arm64 --output type=docker -f Dockerfile.prod.host -t host:${{ env.REVISION }} .
 
       - name: Save Docker Images
         run: |
