@@ -4,8 +4,8 @@ WORKDIR /app
 
 ENV SERVICE_NAME=vite-host
 
-COPY ../apps/$SERVICE_NAME/. apps/$SERVICE_NAME/.
-COPY ../packages/. packages/.
+COPY apps/$SERVICE_NAME/. apps/$SERVICE_NAME/.
+COPY packages/. packages/.
 
 WORKDIR /app/packages/store
 RUN npm ci && npm run build
