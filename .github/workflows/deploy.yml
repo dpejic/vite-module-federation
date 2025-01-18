@@ -57,15 +57,15 @@ jobs:
         run: |
           set -e
           ssh -o StrictHostKeyChecking=no ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_SERVER_IP }} << EOF
-          docker load -i /home/dev/app/tar/host-${{ env.REVISION }}.tar
-          docker load -i /home/dev/app/tar/catalog-${{ env.REVISION }}.tar
-          docker load -i /home/dev/app/tar/shopping-${{ env.REVISION }}.tar
+          sudo docker load -i /home/dev/app/tar/host-${{ env.REVISION }}.tar
+          sudo docker load -i /home/dev/app/tar/catalog-${{ env.REVISION }}.tar
+          sudo docker load -i /home/dev/app/tar/shopping-${{ env.REVISION }}.tar
 
-          sed -i "s|image: host:.*|image: host:${{ env.REVISION }}|" /app/docker-compose.yml
-          sed -i "s|image: catalog:.*|image: catalog:${{ env.REVISION }}|" /app/docker-compose.yml
-          sed -i "s|image: shopping:.*|image: shopping:${{ env.REVISION }}|" /app/docker-compose.yml
+          sed -i "s|image: host:.*|image: host:${{ env.REVISION }}|" /home/dev/app/docker-compose.yml
+          sed -i "s|image: catalog:.*|image: catalog:${{ env.REVISION }}|" /home/dev/app/docker-compose.yml
+          sed -i "s|image: shopping:.*|image: shopping:${{ env.REVISION }}|" /home/dev/app/docker-compose.yml
 
-          cd docker
+          cd /home/dev/docker
           docker compose down
           docker compose up -d
 
