@@ -65,9 +65,9 @@ jobs:
           sed -i "s|image: catalog:.*|image: catalog:${{ env.REVISION }}|" /home/dev/app/docker-compose.yaml
           sed -i "s|image: shopping:.*|image: shopping:${{ env.REVISION }}|" /home/dev/app/docker-compose.yaml
 
-          cd /home/dev
-          docker compose down
-          docker compose up -d
+          cd /home/dev/app
+          echo "${{ secrets.SUDO_PASSWORD }}" | docker compose down
+          echo "${{ secrets.SUDO_PASSWORD }}" | docker compose up -d
 
           # Cleanup
           rm /home/dev/app/tar/*.tar
