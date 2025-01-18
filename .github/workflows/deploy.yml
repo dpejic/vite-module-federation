@@ -18,6 +18,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
       - name: Setup SSH with a passphrase
         env:
           SSH_PASSPHRASE: ${{secrets.SSH_KEY_PASSPHRASE}}
@@ -38,9 +41,10 @@ jobs:
 
       - name: Build Docker Images
         run: |
-          docker build --platform linux/arm64 -f Dockerfile.prod.host -t host:${{ env.REVISION }} .
-          docker build --platform linux/arm64 -f Dockerfile.prod.catalog -t catalog:${{ env.REVISION }} .
-          docker build --platform linux/arm64 -f Dockerfile.prod.shopping -t shopping:${{ env.REVISION }} .
+          docker buildx create --use
+          docker buildx build --platform linux/arm64 -f Dockerfile.prod.host -t host:${{ env.REVISION }} .
+          docker buildx build --platform linux/arm64 -f Dockerfile.prod.catalog -t catalog:${{ env.REVISION }} .
+          docker buildx build --platform linux/arm64 -f Dockerfile.prod.shopping -t shopping:${{ env.REVISION }} .
 
       - name: Save Docker Images
         run: |

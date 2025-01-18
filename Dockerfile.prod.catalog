@@ -7,6 +7,8 @@ ENV SERVICE_NAME=vite-catalog
 COPY apps/$SERVICE_NAME/. apps/$SERVICE_NAME/.
 COPY packages/. packages/.
 
+RUN apt-get update && apt-get install -y build-essential libssl-dev
+
 WORKDIR /app/packages/store
 RUN npm ci && npm run build
 
