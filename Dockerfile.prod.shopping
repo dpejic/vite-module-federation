@@ -21,6 +21,8 @@ RUN rm -rf node_modules && npm ci && npm run build
 
 FROM node:20-slim AS runner
 
+RUN apt-get update && apt-get install -y dumb-init
+
 ENV SERVICE_NAME=vite-shopping
 
 WORKDIR /app/apps/$SERVICE_NAME
@@ -30,4 +32,4 @@ COPY --from=builder /app/packages/. /app/packages/.
 
 EXPOSE 3008
 
-CMD ["/bin/sh", "-c", "cd /app/apps/$SERVICE_NAME && npm run preview"]
+CMD ["dumb-init", "sh", "-c", "cd /app/apps/$SERVICE_NAME && npm run preview"]
