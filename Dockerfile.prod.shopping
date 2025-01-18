@@ -21,7 +21,7 @@ RUN rm -rf node_modules && npm ci && npm run build
 
 FROM node:20-slim AS runner
 
-RUN apt-get update && apt-get install -y dumb-init
+RUN apt update && apt install libssl-dev dumb-init -y --no-install-recommends
 
 ENV SERVICE_NAME=vite-shopping
 
