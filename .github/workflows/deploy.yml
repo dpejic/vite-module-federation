@@ -23,7 +23,12 @@ jobs:
           ssh-keyscan -H ${{ secrets.REMOTE_SERVER_IP }} >> ~/.ssh/known_hosts
         shell: bash
 
+      - name: Test SSH Connection
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_SERVER_IP }} "echo 'SSH connection successful'"
+        shell: bash
+
       - name: Transfer Images to Server
         run: |
           set -e
-          scp -o StrictHostKeyChecking=no notes.txt ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_SERVER_IP }}:/app/tar
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa notes.txt ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_SERVER_IP }}:/app/tar
