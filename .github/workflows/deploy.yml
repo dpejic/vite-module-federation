@@ -23,6 +23,13 @@ jobs:
           ssh-keyscan -H ${{ secrets.REMOTE_SERVER_IP }} >> ~/.ssh/known_hosts
         shell: bash
 
+      - name: Debug SSH Key Setup
+        run: |
+          ls -l ~/.ssh
+          cat ~/.ssh/id_rsa
+        shell: bash
+        continue-on-error: true
+
       - name: Test SSH Connection
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_SERVER_IP }} "echo 'SSH connection successful'"
