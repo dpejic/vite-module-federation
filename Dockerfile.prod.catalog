@@ -1,4 +1,4 @@
-FROM arm64v8/node:20 AS builder
+FROM node:20 AS builder
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ RUN npm ci && npm run build
 WORKDIR /app/apps/$SERVICE_NAME
 RUN rm -rf node_modules && npm ci && npm run build
 
-FROM arm64v8/node:20 AS runner
+FROM node:20 AS runner
 
 ENV SERVICE_NAME=vite-catalog
 
