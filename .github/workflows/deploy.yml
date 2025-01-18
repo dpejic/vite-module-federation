@@ -35,4 +35,4 @@ jobs:
       - name: Transfer Images to Server
         run: |
           set -e
-          scp -o StrictHostKeyChecking=no notes.txt ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_SERVER_IP }}:/app/tar
+          scp -o StrictHostKeyChecking=no notes.txt ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_SERVER_IP }}:/home/dev/app/tar
