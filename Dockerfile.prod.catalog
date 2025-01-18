@@ -18,7 +18,11 @@ RUN rm -rf node_modules && npm ci && npm run build
 
 FROM node:20-slim AS runner
 
-RUN apt update && apt install libssl-dev dumb-init -y --no-install-recommends
+RUN apt-get update && apt-get install -y \
+  libssl-dev \
+  dumb-init \
+  --no-install-recommends && \
+  rm -rf /var/lib/apt/lists/*
 
 ENV SERVICE_NAME=vite-catalog
 
