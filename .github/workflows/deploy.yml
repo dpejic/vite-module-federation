@@ -29,7 +29,6 @@ jobs:
 
       - name: Build Docker Images
         run: |
-          cd docker
           docker build -f Dockerfile.prod.host -t host:${{ env.REVISION }} .
           docker build -f Dockerfile.prod.catalog -t catalog:${{ env.REVISION }} .
           docker build -f Dockerfile.prod.shopping -t shopping:${{ env.REVISION }} .
