@@ -32,7 +32,43 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_SERVER_IP }} "echo 'SSH connection successful'"
         shell: bash
 
+      - name: Get Git Revision Count
+        id: revision
+        run: echo "REVISION=$(git rev-list --count prod)" >> $GITHUB_ENV
+
+      - name: Build Docker Images
+        run: |
+          docker build -f Dockerfile.prod.host -t host:${{ env.REVISION }} .
+          docker build -f Dockerfile.prod.catalog -t catalog:${{ env.REVISION }} .
+          docker build -f Dockerfile.prod.shopping -t shopping:${{ env.REVISION }} .
+
+      - name: Save Docker Images
+        run: |
+          docker save -o host-${{ env.REVISION }}.tar host:${{ env.REVISION }}
+          docker save -o catalog-${{ env.REVISION }}.tar catalog:${{ env.REVISION }}
+          docker save -o shopping-${{ env.REVISION }}.tar shopping:${{ env.REVISION }}
+
       - name: Transfer Images to Server
         run: |
           set -e
-          scp -o StrictHostKeyChecking=no notes.txt ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_SERVER_IP }}:/home/dev/app/tar
+          scp -o StrictHostKeyChecking=no host-${{ env.REVISION }}.tar catalog-${{ env.REVISION }}.tar shopping-${{ env.REVISION }}.tar ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_SERVER_IP }}:/home/dev/app/tar
+
+      - name: Load Images and Deploy Stack
+        run: |
+          set -e
+          ssh -o StrictHostKeyChecking=no ${{ secrets.REMOTE_USERNAME }}@${{ secrets.REMOTE_SERVER_IP }} << EOF
+          docker load -i /app/tar/host-${{ env.REVISION }}.tar
+          docker load -i /app/tar/catalog-${{ env.REVISION }}.tar
+          docker load -i /app/tar/shopping-${{ env.REVISION }}.tar
+
+          sed -i "s|image: host:.*|image: host:${{ env.REVISION }}|" /app/docker-compose.yml
+          sed -i "s|image: catalog:.*|image: catalog:${{ env.REVISION }}|" /app/docker-compose.yml
+          sed -i "s|image: shopping:.*|image: shopping:${{ env.REVISION }}|" /app/docker-compose.yml
+
+          cd docker
+          docker compose down
+          docker compose up -d
+
+          # Cleanup
+          rm /home/dev/app/tar/*.tar
+          EOF
