@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 import { defineConfig, PluginOption } from "vite";
 import react from "@vitejs/plugin-react";
 import { federation } from "@module-federation/vite";
@@ -11,7 +13,7 @@ import { wasm } from "@rollup/plugin-wasm";
 dns.setDefaultResultOrder("verbatim");
 
 export default defineConfig({
-  base: "https://dpejic.com",
+  base: process.env.VITE_APP_URL,
   resolve: {
     alias: {
       "@dp-wk/store": path.resolve(__dirname, "../../packages/store"),
@@ -40,7 +42,7 @@ export default defineConfig({
     host: "0.0.0.0",
     proxy: {
       "/socket.io": {
-        target: "ws://dpejic.com",
+        target: process.env.VITE_WS_URL,
         ws: true,
       },
     },
@@ -73,13 +75,13 @@ export default defineConfig({
         "@shopping": {
           type: "module",
           name: "@shopping",
-          entry: "https://shopping.dpejic.com/remoteEntry.js",
+          entry: process.env.VITE_SHOPPING_URL as string,
           entryGlobalName: "@shopping",
         },
         "@catalog": {
           type: "module",
           name: "@catalog",
-          entry: "https://catalog.dpejic.com/remoteEntry.js",
+          entry: process.env.VITE_CATALOG_URL as string,
           entryGlobalName: "@catalog",
         },
       },
