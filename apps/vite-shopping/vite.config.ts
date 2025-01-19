@@ -59,6 +59,7 @@ export default defineConfig(({ mode }) => {
         usePolling: true,
         ignored: ["!../../packages/store/**", "!../../packages/emitter/**"],
       },
+      cors: false,
     },
     build: {
       target: "chrome89",
@@ -87,9 +88,7 @@ export default defineConfig(({ mode }) => {
       host: "0.0.0.0",
       port: 3008,
       strictPort: true,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
+      cors: false,
     },
   };
 });
