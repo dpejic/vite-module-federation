@@ -20,7 +20,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "typeRoots": ["./node_modules/@types", "global.d.ts"],
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "types": ["vite/client"]
   },
-  "include": ["global.d.ts", "src"]
+  "include": ["global.d.ts", "src", "vite-env.d.ts", "vite.config.*"]
 }

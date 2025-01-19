@@ -6,15 +6,15 @@ RUN npm install -g concurrently
 
 ENV SERVICE_NAME=vite-shopping
 
-COPY ../apps/vite-shopping/. apps/vite-shopping/.
-COPY ../packages/. packages/.
+COPY ./apps/vite-shopping/. apps/vite-shopping/.
+COPY ./packages/. packages/.
 
-RUN cd packages/store && npm ci
-RUN cd packages/emitter && npm ci
-RUN cd packages/utils && npm ci
+RUN cd ./packages/store && npm ci
+RUN cd ./packages/emitter && npm ci
+RUN cd ./packages/utils && npm ci
 
-RUN cd apps/vite-shopping && rm -rf node_modules && npm ci
+RUN cd ./apps/vite-shopping && rm -rf node_modules && npm ci
 
 EXPOSE 3008
 
-CMD ["sh", "-c", "concurrently --kill-others \"cd packages/utils && npm run watch\" \"cd packages/store && npm run watch\" \"cd packages/emitter && npm run watch\" \"cd apps/vite-shopping && npm run dev\""]
+CMD ["sh", "-c", "concurrently --kill-others \"cd ./packages/utils && npm run watch\" \"cd ./packages/store && npm run watch\" \"cd ./packages/emitter && npm run watch\" \"cd ./apps/vite-shopping && npm run dev\""]

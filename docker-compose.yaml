@@ -4,14 +4,16 @@ services:
   vite-host:
     platform: linux/amd64
     build: 
-      context: ../
-      dockerfile: docker/Dockerfile.dev.host
-    container_name: vite-host
+      context: .
+      dockerfile: Dockerfile.dev.host
+    image: vite-module-federation-vite-host:latest
+    env_file:
+      - ./apps/vite-host/.env
     ports:
       - 3080:3080
     volumes:
-      - ../apps/vite-host:/app/apps/vite-host
-      - ../packages:/app/packages
+      - ./apps/vite-host:/app/apps/vite-host
+      - ./packages:/app/packages
       - /app/apps/vite-host/node_modules
       - /app/packages/store/node_modules
       - /app/packages/emitter/node_modules
@@ -23,14 +25,16 @@ services:
   vite-catalog:
     platform: linux/amd64
     build: 
-      context: ../
-      dockerfile: docker/Dockerfile.dev.catalog
-    container_name: vite-catalog
+      context: .
+      dockerfile: Dockerfile.dev.catalog
+    image: vite-module-federation-vite-catalog:latest
+    env_file:
+      - ./apps/vite-catalog/.env
     ports:
       - 3081:3081
     volumes:
-      - ../apps/vite-catalog:/app/apps/vite-catalog
-      - ../packages:/app/packages
+      - ./apps/vite-catalog:/app/apps/vite-catalog
+      - ./packages:/app/packages
       - /app/apps/vite-catalog/node_modules
       - /app/packages/store/node_modules
       - /app/packages/emitter/node_modules
@@ -43,14 +47,16 @@ services:
   vite-shopping:
     platform: linux/amd64
     build: 
-      context: ../
-      dockerfile: docker/Dockerfile.dev.shopping
-    container_name: vite-shopping
+      context: .
+      dockerfile: Dockerfile.dev.shopping
+    image: vite-module-federation-vite-shopping:latest
+    env_file:
+      - ./apps/vite-shopping/.env
     ports:
       - 3082:3082
     volumes:
-      - ../apps/vite-shopping:/app/apps/vite-shopping
-      - ../packages:/app/packages
+      - ./apps/vite-shopping:/app/apps/vite-shopping
+      - ./packages:/app/packages
       - /app/apps/vite-shopping/node_modules
       - /app/packages/store/node_modules
       - /app/packages/emitter/node_modules
@@ -63,6 +69,8 @@ services:
   nginx_proxy_manager:
     image: jc21/nginx-proxy-manager:2.12.1
     restart: unless-stopped
+    labels:
+      keep: "true"
     ports:
       - "80:80"
       - "443:443"

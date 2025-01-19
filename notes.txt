@@ -71,7 +71,7 @@ Enters:
 
   Go to Custom locations
   add /remoteEntry.js
-  http vite-shopping 3007
+  http vite-catalog 3007
 
   select custom config add this
 
@@ -135,4 +135,4 @@ docker run -d -p 3005:3005 --name my-vite-host my-vite-host:latest
 
 
 
-Test
+docker compose up -d --pull=never

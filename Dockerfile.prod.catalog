@@ -14,7 +14,7 @@ WORKDIR /app/packages/emitter
 RUN npm ci && npm run build
 
 WORKDIR /app/apps/vite-catalog
-RUN rm -rf node_modules && npm ci && npm run build
+RUN rm -rf node_modules && npm ci && npm run build-prod
 
 FROM node:20 AS runner
 

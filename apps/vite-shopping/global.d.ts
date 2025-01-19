@@ -1,5 +1,6 @@
 import type { EventEmitterType } from "@dp-wk/emitter";
 import type { SharedStoreType } from "@dp-wk/store";
+/// <reference types="vite/client" />
 
 declare module "*.module.css";
 
