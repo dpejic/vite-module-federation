@@ -25,4 +25,4 @@ COPY --from=builder /app/packages/. /app/packages/.
 
 EXPOSE 3005
 
-CMD ["sh", "-c", "/app/apps/vite-host && npm run preview"]
+CMD ["sh", "-c", "cd /app/apps/vite-host && npm run preview"]
