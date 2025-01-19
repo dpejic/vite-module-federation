@@ -7,9 +7,11 @@
   },
   "scripts": {
     "postbuild": "npm run move-files",
+    "postbuild-prod": "npm run move-files",
     "dev": "vite dev",
     "move-files": "find dist -mindepth 1 -not -path 'dist/analog*' -exec rm -rf {} + && shx mv dist/analog/public/* dist && shx rm -rf dist/analog",
-    "build": "ng build",
+    "build": "ng build --configuration development",
+    "build-prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "preview": "vite preview"
