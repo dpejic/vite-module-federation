@@ -58,7 +58,6 @@ export default defineConfig(({ mode }) => {
         usePolling: true,
         ignored: ['!../../packages/store/**', '!../../packages/emitter/**'],
       },
-      cors: false,
     },
     plugins: <PluginOption[]>[
       wasm(),
@@ -85,7 +84,9 @@ export default defineConfig(({ mode }) => {
       host: '0.0.0.0',
       port: 3007,
       strictPort: true,
-      cors: false,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     },
   };
 });
