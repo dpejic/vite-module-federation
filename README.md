@@ -1,3 +1,14 @@
-### Vite Module Federation (React + Angular)
+### Vite Module Federation (React & Angular)
 
-under construction
+Microfrontends
+
+Docker
+CI/CD
+
+Zustand
+Emitter
+TailwindCSS
+
+Host: React
+Catalog: AnalogJS (fullstack Angular)
+Shopping Modal: React
