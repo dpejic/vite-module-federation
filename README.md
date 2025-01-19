@@ -2,13 +2,13 @@
 
 Microfrontends
 
-Docker
-CI/CD
+Docker<br />
+CI/CD<br />
 
-Zustand
-Emitter
-TailwindCSS
+Zustand<br />
+Emitter<br />
+TailwindCSS<br />
 
-Host: React
-Catalog: AnalogJS (fullstack Angular)
+Host: React<br />
+Catalog: AnalogJS (fullstack Angular)<br />
 Shopping Modal: React
