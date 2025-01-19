@@ -12,3 +12,5 @@ TailwindCSS<br />
 Host: React<br />
 Catalog: AnalogJS (fullstack Angular)<br />
 Shopping Modal: React
+
+demo url: https://dpejic.xyz
